@@ -126,28 +126,37 @@
 
         <div id="rsvp" class="card reveal">
             <h3>Confirmation</h3>
-            <form id="rsvpForm" class="rsvp-container" action="https://script.google.com/macros/s/AKfycbzGdeDrj7O8F9VU20HS-zG22evISJBJBwkDYg65z3tvhIMMlQEAD1lIk8olcVEWSU3l/exec" method="POST">
+            <form id="rsvpForm" class="rsvp-container" action="VOTRE_URL_GOOGLE_SCRIPT_ICI" method="POST">
+                
                 <label class="form-label">Votre Nom & Prénom</label>
-                <input type="text" name="Nom_Prenom" required>
+                <input type="text" name="Nom_Prenom" placeholder="Ex: Jean Dupont" required>
                 
                 <label class="form-label">Présence à la Mairie ?</label>
-                <select name="Mairie_Presence" onchange="showQty('m_qty', this.value === 'oui')">
-                    <option value="non">Non</option>
-                    <option value="oui">Oui</option>
+                <select name="Mairie_Presence" onchange="toggleQty('m_qty', this.value)">
+                    <option value="non">Je ne serai pas présent(e)</option>
+                    <option value="oui">Je serai présent(e)</option>
                 </select>
-                <div id="m_qty" style="display:none; margin-top:15px;">
-                    <input type="number" name="Mairie_Adultes" placeholder="Nombre d'adultes">
-                    <input type="number" name="Mairie_Enfants" placeholder="Nombre d'enfants (-14 ans)">
+
+                <div id="m_qty" class="qty-wrapper" style="display:none;">
+                    <label class="form-label">Nombre de personnes (Mairie)</label>
+                    <select name="Mairie_Adultes">
+                        <option value="1">1 personne</option>
+                        <option value="2">2 personnes</option>
+                    </select>
                 </div>
                 
                 <label class="form-label" style="margin-top: 15px;">Présence à la Houppa ?</label>
-                <select name="Houppa_Presence" onchange="showQty('h_qty', this.value === 'oui')">
-                    <option value="non">Non</option>
-                    <option value="oui">Oui</option>
+                <select name="Houppa_Presence" onchange="toggleQty('h_qty', this.value)">
+                    <option value="non">Je ne serai pas présent(e)</option>
+                    <option value="oui">Je serai présent(e)</option>
                 </select>
-                <div id="h_qty" style="display:none; margin-top:15px;">
-                    <input type="number" name="Houppa_Adultes" placeholder="Nombre d'adultes">
-                    <input type="number" name="Houppa_Enfants" placeholder="Nombre d'enfants (-14 ans)">
+
+                <div id="h_qty" class="qty-wrapper" style="display:none;">
+                    <label class="form-label">Nombre de personnes (Houppa)</label>
+                    <select name="Houppa_Adultes">
+                        <option value="1">1 personne</option>
+                        <option value="2">2 personnes</option>
+                    </select>
                 </div>
 
                 <label class="form-label" style="margin-top: 15px;">Message (Mazal Tov !)</label>
@@ -165,21 +174,13 @@
         const splash = document.getElementById('splash');
         let isPlaying = false;
 
-        // Fonction lancée au clic sur le splash screen
         function initExperience() {
             if(splash.style.display === 'none') return;
-
-            // Retrait du splash
             splash.style.opacity = '0';
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 1200);
-            
-            // Lancement de la musique (autorisé car suite à un clic)
+            setTimeout(() => { splash.style.display = 'none'; }, 1200);
             startMusic();
         }
 
-        // Sécurité : si l'utilisateur ne clique pas, on retire le splash après 5s
         setTimeout(() => { if(splash.style.display !== 'none') initExperience(); }, 5000);
 
         function startMusic() {
@@ -188,8 +189,6 @@
                     musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
                     isPlaying = true;
                 }).catch(e => {
-                    console.log("Autoplay bloqué, attente interaction supplémentaire");
-                    // Fallback : on réessaie au premier scroll ou clic sur le document
                     window.addEventListener('scroll', () => { if(!isPlaying) startMusic(); }, { once: true });
                 });
             }
@@ -197,18 +196,16 @@
 
         function toggleMusic(e) {
             if(e) e.stopPropagation();
-            if (isPlaying) { 
-                audio.pause(); 
-                musicBtn.innerHTML = '<i class="fa-solid fa-play"></i>'; 
-                isPlaying = false; 
-            } else { 
-                audio.play(); 
-                musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>'; 
-                isPlaying = true; 
-            }
+            if (isPlaying) { audio.pause(); musicBtn.innerHTML = '<i class="fa-solid fa-play"></i>'; isPlaying = false; } 
+            else { audio.play(); musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>'; isPlaying = true; }
         }
 
-        // Formulaire RSVP
+        // --- GESTION RSVP ---
+        function toggleQty(id, value) {
+            const element = document.getElementById(id);
+            element.style.display = (value === 'oui') ? 'block' : 'none';
+        }
+
         document.getElementById('rsvpForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const form = this;
@@ -227,12 +224,7 @@
                 btn.disabled = false;
             });
         });
-
-        function showQty(id, isVisible) { 
-            document.getElementById(id).style.display = isVisible ? 'block' : 'none'; 
-        }
         
-        // Animation des cartes au scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) entry.target.classList.add('active');

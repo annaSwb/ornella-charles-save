@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mariage de Ornella & Charles</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cinzel:wght@400;500&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #C5A059; 
+            --gold-light: #E8D5B5;
+            --white: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            background-color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            overflow: hidden;
+        }
+
+        .floral-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('fleur.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: scaleX(-1); 
+            z-index: 1;
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .photo-arche {
+            width: 180px; 
+            height: 240px; 
+            background: #fff;
+            padding: 5px;
+            border: 1px solid var(--gold-light);
+            border-radius: 90px 90px 0 0; 
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-arche img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 85px 85px 0 0; 
+            transform: scale(1.3); 
+        }
+
+        /* Taille réduite ici */
+        h1 {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 2.2rem; 
+            color: var(--gold);
+            margin-bottom: 15px;
+            line-height: 1.1;
+            font-weight: 400;
+        }
+
+        .timer-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 8px 12px;
+            border-radius: 50px;
+        }
+
+        .timer-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 35px;
+        }
+
+        /* Taille réduite ici */
+        .timer-val {
+            font-size: 1rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .timer-label {
+            font-size: 0.45rem;
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .btn-open {
+            background-color: #B08D57;
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            padding: 12px 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.1rem; }
+            .photo-arche { width: 150px; height: 200px; border-radius: 75px 75px 0 0; }
+            .photo-arche img { border-radius: 70px 70px 0 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floral-background"></div>
+
+    <div class="main-wrapper">
+        <div class="photo-arche">
+            <img src="photo.jpeg" alt="Ornella & Charles">
+        </div>
+
+        <h1>Ornella & Charles</h1>
+
+        <div class="timer-container">
+            <div class="timer-box">
+                <span class="timer-val" id="d">00</span>
+                <span class="timer-label">Jours</span>
+            </div>
+            <div class="timer-box">
+                <span class="timer-val" id="h">00</span>
+                <span class="timer-label">Hrs</span>
+            </div>
+            <div class="timer-box">
+                <span class="timer-val" id="m">00</span>
+                <span class="timer-label">Min</span>
+            </div>
+            <div class="timer-box">
+                <span class="timer-val" id="s">00</span>
+                <span class="timer-label">Sec</span>
+            </div>
+        </div>
+
+        <a href="invitation.html" class="btn-open">Voir l'invitation</a>
+    </div>
+
+    <script>
+        const target = new Date(2026, 6, 29, 17, 30, 0).getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            if (diff > 0) {
+                document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            }
+        }
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>

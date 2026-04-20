@@ -22,37 +22,73 @@
 
         nav { position: sticky; top: 0; width: 100%; z-index: 1000; background: rgba(255, 254, 250, 0.98); border-bottom: 1px solid var(--gold-light); padding: 15px 0; display: flex; justify-content: center; gap: 15px; }
         nav a { text-decoration: none; color: var(--text-dark); font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; font-weight: 700; }
+        
         .main-wrapper { max-width: 600px; margin: 0 auto; padding: 40px 10px; display: flex; flex-direction: column; gap: 60px; }
-        .card { position: relative; padding: 60px 35px; background-color: #fff; border: 1px solid var(--gold-main); box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; }
+        .card { position: relative; padding: 60px 25px; background-color: #fff; border: 1px solid var(--gold-main); box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; overflow: hidden; }
         .card::after { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 1px solid var(--gold-light); opacity: 0.5; pointer-events: none; }
+        
+        /* Correction Noms sur une ligne */
+        .couple-names, .names-inline { 
+            font-family: 'Great Vibes', cursive !important; 
+            color: var(--gold-main); 
+            margin: 10px 0; 
+            white-space: nowrap; 
+            display: block;
+            font-size: clamp(2rem, 10vw, 3.5rem); /* Taille fluide selon l'écran */
+        }
+
         #houppa { position: relative; overflow: visible; padding-top: 80px; padding-bottom: 80px; }
         .flower-specific { position: absolute; width: 120px; z-index: 10; }
         .flower-specific-top { top: -30px; right: -40px; }
         .flower-specific-bottom { bottom: -30px; left: -40px; }
+        
         .deco-leaf { position: absolute; top: 0; bottom: 0; width: 80px; background-size: contain; background-repeat: repeat-y; opacity: 0.6; }
         .leaf-left { left: -15px; background-image: url('feuille-gauche1.png'); }
         .leaf-right { right: -15px; background-image: url('feuille-droite1.png'); }
+        
         h3 { font-family: 'Cinzel', serif; letter-spacing: 3px; font-size: 1.3rem; color: var(--gold-main); text-transform: uppercase; margin-bottom: 15px; }
-        .couple-names { font-family: 'Great Vibes', cursive !important; font-size: 3.5rem; color: var(--gold-main); margin: 10px 0; }
-        .names-inline { font-family: 'Great Vibes', cursive; font-size: 3rem; color: var(--gold-main); margin: 10px 0; white-space: nowrap; }
         .hebrew-row { font-size: 2rem; font-family: serif; color: var(--gold-main); margin-bottom: 10px; }
         .date-main { color: var(--gold-main); font-weight: 700; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
         .divider { width: 60px; height: 1px; background: var(--gold-main); margin: 25px auto; }
+        
         .btn-waze { display: inline-block; margin-top: 25px; color: var(--gold-main); border-bottom: 1px solid var(--gold-main); padding-bottom: 5px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        
         .rsvp-container { text-align: left; margin-top: 30px; }
         .form-label { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--gold-main); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
-        input[type="text"], select { width: 100%; padding: 12px 0; border: none; border-bottom: 1.5px solid var(--gold-light); background: transparent; font-family: 'Montserrat', sans-serif; outline: none; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 12px 0; border: none; border-bottom: 1.5px solid var(--gold-light); background: transparent; font-family: 'Montserrat', sans-serif; outline: none; margin-bottom: 10px; }
+        
         .btn-submit { background: var(--gold-main); color: #fff; border: none; padding: 20px; width: 100%; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 4px; font-weight: 700; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
         .music-btn { position: fixed; bottom: 30px; right: 20px; z-index: 2000; width: 55px; height: 55px; border-radius: 50%; background: var(--gold-main); border: 2px solid #fff; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
         .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .souvenir-text { font-style: italic; margin-top: 20px; font-size: 0.9rem; color: #555; font-weight: 700; }
-        #success-msg { display: none; text-align: center; font-family: 'Montserrat', sans-serif; color: var(--gold-main); padding: 20px; }
+        
+        .souvenir-text { font-style: italic; margin-top: 25px; font-size: 1rem; color: #444; font-weight: 700; line-height: 1.5; border-top: 1px solid #E8D5B5; padding-top: 15px; }
+        
+        /* Correction ici : décalage vers la gauche et priorité d'affichage */
+.bsd-text { 
+    position: absolute; 
+    top: 15px; 
+    right: 20px; 
+    font-family: 'Cormorant Garamond', serif; 
+    font-size: 1.1rem; 
+    color: #C5A059; 
+    font-weight: 700; 
+    z-index: 100; /* Assure que le texte passe devant les feuilles décoratives */
+}
+
+.bsd-mairie { 
+    right: 50px; /* Passage de 20px à 50px pour le pousser vers la gauche */
+}
+
+        .sub-title { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dark); margin: 5px 0 15px 0; }
+        #success-msg { display: none; text-align: center; font-family: 'Montserrat', sans-serif; color: var(--gold-main); padding: 20px; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div id="splash" onclick="removeSplash()">
+    <div id="splash" onclick="initExperience()">
         <img src="logo.png" alt="Logo">
     </div>
 
@@ -67,19 +103,22 @@
 
     <div class="main-wrapper">
         <div id="mairie" class="card reveal">
+            <span class="bsd-text bsd-mairie">בס"ד</span>
             <div class="deco-leaf leaf-left"></div>
             <div class="deco-leaf leaf-right"></div>
             <i class="fa-solid fa-landmark" style="color: var(--gold-main); font-size: 1.5rem; margin-bottom: 10px;"></i>
-            <h3>Mariage Civil</h3>
+            <h3>Cérémonie Civile</h3>
             <div class="couple-names">Ornella & Charles</div>
+            <div class="sub-title">se diront "oui"</div>
             <div class="divider"></div>
-            <div class="date-main">Lundi 27 Juillet 2026</div>
+            <div class="date-main">Le Lundi 27 Juillet 2026</div>
             <p style="margin-top: 10px; font-weight: 600;">À 15H30</p>
             <p><strong>Mairie de Joinville-le-Pont</strong></p>
             <a href="https://waze.com/ul?q=Mairie%20de%20Joinville-le-Pont" target="_blank" class="btn-waze">GPS WAZE</a>
         </div>
 
         <div id="houppa" class="card reveal">
+            <span class="bsd-text">בס"ד</span>
             <img src="haut-droite.png" alt="" class="flower-specific flower-specific-top">
             <img src="bas-gauche.png" alt="" class="flower-specific flower-specific-bottom">
             <img src="hebreu.png" alt="BeSiman Tov" style="width: 80%; max-width: 250px; margin-bottom: 20px;">
@@ -91,7 +130,11 @@
             <div class="date-main">Mercredi 29 Juillet 2026</div>
             <p style="margin-top: 10px; font-weight: 600;">À 17H30</p>
             <p><strong>La Verrière 91</strong></p>
-            <p class="souvenir-text">En ce jour si précieux, nous avons une tendre pensée pour la mémoire de ma maman, Brigitte Léa Haouzi.</p>
+            <p class="souvenir-text">
+                En ce jour si précieux, nous avons une tendre pensée pour la mémoire de ma maman,
+                Brigitte Léa Haouzi, notre étoile qui illuminera ce mariage de sa lumière éternelle.
+                Ainsi qu’à tous nos chers disparus partis trop tôt.
+            </p>
             <a href="https://waze.com/ul?q=La%20Verriere%2091" target="_blank" class="btn-waze">GPS WAZE</a>
         </div>
 

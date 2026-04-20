@@ -27,14 +27,13 @@
         .card { position: relative; padding: 60px 25px; background-color: #fff; border: 1px solid var(--gold-main); box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; overflow: hidden; }
         .card::after { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 1px solid var(--gold-light); opacity: 0.5; pointer-events: none; }
         
-        /* Correction Noms sur une ligne */
         .couple-names, .names-inline { 
             font-family: 'Great Vibes', cursive !important; 
             color: var(--gold-main); 
             margin: 10px 0; 
             white-space: nowrap; 
             display: block;
-            font-size: clamp(2rem, 10vw, 3.5rem); /* Taille fluide selon l'écran */
+            font-size: clamp(2rem, 10vw, 3.5rem); 
         }
 
         #houppa { position: relative; overflow: visible; padding-top: 80px; padding-bottom: 80px; }
@@ -66,21 +65,8 @@
         
         .souvenir-text { font-style: italic; margin-top: 25px; font-size: 1rem; color: #444; font-weight: 700; line-height: 1.5; border-top: 1px solid #E8D5B5; padding-top: 15px; }
         
-        /* Correction ici : décalage vers la gauche et priorité d'affichage */
-.bsd-text { 
-    position: absolute; 
-    top: 15px; 
-    right: 20px; 
-    font-family: 'Cormorant Garamond', serif; 
-    font-size: 1.1rem; 
-    color: #C5A059; 
-    font-weight: 700; 
-    z-index: 100; /* Assure que le texte passe devant les feuilles décoratives */
-}
-
-.bsd-mairie { 
-    right: 50px; /* Passage de 20px à 50px pour le pousser vers la gauche */
-}
+        .bsd-text { position: absolute; top: 15px; right: 20px; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #C5A059; font-weight: 700; z-index: 100; }
+        .bsd-mairie { right: 50px; }
 
         .sub-title { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dark); margin: 5px 0 15px 0; }
         #success-msg { display: none; text-align: center; font-family: 'Montserrat', sans-serif; color: var(--gold-main); padding: 20px; font-weight: 700; }
@@ -150,11 +136,8 @@
                     <option value="oui">Oui</option>
                 </select>
                 <div id="m_qty" style="display:none; margin-top:15px;">
-                    <label class="form-label" style="font-size: 0.65rem;">Nombre d'adultes :</label>
-                    <select name="Mairie_Adultes">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
+                    <input type="number" name="Mairie_Adultes" placeholder="Nombre d'adultes">
+                    <input type="number" name="Mairie_Enfants" placeholder="Nombre d'enfants (-14 ans)">
                 </div>
                 
                 <label class="form-label" style="margin-top: 15px;">Présence à la Houppa ?</label>
@@ -163,11 +146,8 @@
                     <option value="oui">Oui</option>
                 </select>
                 <div id="h_qty" style="display:none; margin-top:15px;">
-                    <label class="form-label" style="font-size: 0.65rem;">Nombre d'adultes :</label>
-                    <select name="Houppa_Adultes">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
+                    <input type="number" name="Houppa_Adultes" placeholder="Nombre d'adultes">
+                    <input type="number" name="Houppa_Enfants" placeholder="Nombre d'enfants (-14 ans)">
                 </div>
 
                 <label class="form-label" style="margin-top: 15px;">Message (Mazal Tov !)</label>
@@ -185,40 +165,80 @@
         const splash = document.getElementById('splash');
         let isPlaying = false;
 
-        setTimeout(() => removeSplash(), 4000);
+        // Fonction lancée au clic sur le splash screen
+        function initExperience() {
+            if(splash.style.display === 'none') return;
 
-        function removeSplash() {
-            if(splash.style.display !== 'none') {
-                splash.style.opacity = '0';
-                setTimeout(() => splash.style.display = 'none', 1200);
-            }
+            // Retrait du splash
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 1200);
+            
+            // Lancement de la musique (autorisé car suite à un clic)
+            startMusic();
         }
 
-        window.addEventListener('scroll', () => {
+        // Sécurité : si l'utilisateur ne clique pas, on retire le splash après 5s
+        setTimeout(() => { if(splash.style.display !== 'none') initExperience(); }, 5000);
+
+        function startMusic() {
             if (!isPlaying) {
-                audio.play().then(() => { musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>'; isPlaying = true; }).catch(()=>{});
+                audio.play().then(() => {
+                    musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    isPlaying = true;
+                }).catch(e => {
+                    console.log("Autoplay bloqué, attente interaction supplémentaire");
+                    // Fallback : on réessaie au premier scroll ou clic sur le document
+                    window.addEventListener('scroll', () => { if(!isPlaying) startMusic(); }, { once: true });
+                });
             }
-        }, { once: true });
+        }
 
         function toggleMusic(e) {
             if(e) e.stopPropagation();
-            if (isPlaying) { audio.pause(); musicBtn.innerHTML = '<i class="fa-solid fa-play"></i>'; isPlaying = false; }
-            else { audio.play(); musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>'; isPlaying = true; }
+            if (isPlaying) { 
+                audio.pause(); 
+                musicBtn.innerHTML = '<i class="fa-solid fa-play"></i>'; 
+                isPlaying = false; 
+            } else { 
+                audio.play(); 
+                musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>'; 
+                isPlaying = true; 
+            }
         }
 
+        // Formulaire RSVP
         document.getElementById('rsvpForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const form = this;
+            const btn = form.querySelector('.btn-submit');
+            btn.innerHTML = "Envoi en cours...";
+            btn.disabled = true;
+
             fetch(form.action, { method: 'POST', body: new FormData(form) })
             .then(() => { 
                 form.style.display = 'none';
                 document.getElementById('success-msg').style.display = 'block';
+            })
+            .catch(() => {
+                alert("Erreur lors de l'envoi. Réessayez.");
+                btn.innerHTML = "Valider ma réponse";
+                btn.disabled = false;
             });
         });
 
-        function showQty(id, isVisible) { document.getElementById(id).style.display = isVisible ? 'block' : 'none'; }
+        function showQty(id, isVisible) { 
+            document.getElementById(id).style.display = isVisible ? 'block' : 'none'; 
+        }
         
-        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.1 });
+        // Animation des cartes au scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>

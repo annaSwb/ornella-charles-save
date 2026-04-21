@@ -24,6 +24,8 @@
             background-color: var(--white);
             font-family: 'Cormorant Garamond', serif;
             overflow: hidden;
+            /* Nécessaire pour l'effet 3D du livre */
+            perspective: 2000px;
         }
 
         .floral-background {
@@ -51,6 +53,17 @@
             justify-content: center;
             text-align: center;
             padding: 20px;
+            /* Transition pour l'effet livre */
+            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1s;
+            transform-origin: left center; /* Le livre s'ouvre depuis la gauche */
+            backface-visibility: hidden; /* Cache le dos pendant la rotation */
+        }
+
+        /* Classe activée au clic pour ouvrir le livre */
+        .book-open {
+            transform: rotateY(-180deg);
+            opacity: 0;
+            pointer-events: none; /* Empêche les clics pendant l'animation */
         }
 
         .photo-arche {
@@ -66,6 +79,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            /* --- AJOUT ANIMATION FLOTTAISON --- */
+            animation: floatArche 6s ease-in-out infinite;
         }
 
         .photo-arche img {
@@ -74,6 +89,8 @@
             object-fit: cover;
             border-radius: 85px 85px 0 0; 
             transform: scale(1.3); 
+            /* --- AJOUT ANIMATION ZOOM LENT --- */
+            animation: zoomPhoto 12s ease-in-out infinite alternate;
         }
 
         /* Taille réduite ici */
@@ -128,6 +145,12 @@
             text-transform: uppercase;
             transition: 0.3s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: inline-block; /* Pour que la transformation du bouton fonctionne bien */
+        }
+        
+        .btn-open:hover {
+            background-color: var(--gold);
+            transform: translateY(-2px);
         }
 
         @media (max-width: 480px) {
@@ -135,13 +158,28 @@
             .photo-arche { width: 150px; height: 200px; border-radius: 75px 75px 0 0; }
             .photo-arche img { border-radius: 70px 70px 0 0; }
         }
+
+        /* --- DÉFINITIONS DES ANIMATIONS --- */
+
+        /* Flottaison douce de l'arche */
+        @keyframes floatArche {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Zoom lent et continu de la photo */
+        @keyframes zoomPhoto {
+            0% { transform: scale(1.3); }
+            100% { transform: scale(1.45); }
+        }
+
     </style>
 </head>
 <body>
 
     <div class="floral-background"></div>
 
-    <div class="main-wrapper">
+    <div class="main-wrapper" id="mainPage">
         <div class="photo-arche">
             <img src="photo.jpeg" alt="Ornella & Charles">
         </div>
@@ -167,10 +205,11 @@
             </div>
         </div>
 
-        <a href="invitation.html" class="btn-open">Voir l'invitation</a>
+        <a href="invitation.html" class="btn-open" id="btnInvite">Voir l'invitation</a>
     </div>
 
     <script>
+        // --- TON SCRIPT ORIGINAL DU TIMER (INCHANGÉ) ---
         const target = new Date(2026, 6, 29, 17, 30, 0).getTime();
 
         function updateTimer() {
@@ -186,6 +225,20 @@
         }
         updateTimer();
         setInterval(updateTimer, 1000);
+
+        // --- AJOUT DU SCRIPT POUR L'EFFET LIVRE ---
+        document.getElementById('btnInvite').addEventListener('click', function(e) {
+            e.preventDefault(); // Empêche la redirection immédiate
+            const href = this.getAttribute('href');
+            
+            // Active l'animation d'ouverture du livre
+            document.getElementById('mainPage').classList.add('book-open');
+            
+            // Redirige vers la page d'invitation après la fin de l'animation (1.5s)
+            setTimeout(function() {
+                window.location.href = href;
+            }, 1500); 
+        });
     </script>
 </body>
 </html>

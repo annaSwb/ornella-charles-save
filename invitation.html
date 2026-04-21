@@ -90,7 +90,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
             text-align: center;
             overflow: hidden;
-            /* état initial */
             opacity: 0;
             transform: translateY(50px);
             transition: opacity 0.9s ease-out, transform 0.9s ease-out, box-shadow 0.9s ease-out;
@@ -254,7 +253,6 @@
             letter-spacing: 1px;
         }
         input[type="text"],
-        input[type="number"],
         select {
             width: 100%;
             padding: 12px 0;
@@ -383,10 +381,10 @@
                     <option value="oui">Je serai présent(e)</option>
                 </select>
                 <div id="m_qty" class="qty-wrapper">
-                    <label class="form-label">Nombre de personnes (Mairie)</label>
+                    <label class="form-label">Nombre d'adultes (Mairie)</label>
                     <select name="Mairie_Adultes">
-                        <option value="1">1 personne</option>
-                        <option value="2">2 personnes</option>
+                        <option value="1">1 adulte</option>
+                        <option value="2">2 adultes</option>
                     </select>
                 </div>
 
@@ -396,10 +394,10 @@
                     <option value="oui">Je serai présent(e)</option>
                 </select>
                 <div id="h_qty" class="qty-wrapper">
-                    <label class="form-label">Nombre de personnes (Houppa)</label>
+                    <label class="form-label">Nombre d'adultes (Houppa)</label>
                     <select name="Houppa_Adultes">
-                        <option value="1">1 personne</option>
-                        <option value="2">2 personnes</option>
+                        <option value="1">1 adulte</option>
+                        <option value="2">2 adultes</option>
                     </select>
                 </div>
 
@@ -427,7 +425,6 @@
                 musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
                 isPlaying = true;
             }).catch(() => {
-                // Sur mobile l'autoplay est bloqué : on écoute la première interaction
                 ['touchstart', 'scroll', 'click'].forEach(evt => {
                     window.addEventListener(evt, function handler() {
                         if (!isPlaying) startMusic();
@@ -462,13 +459,12 @@
             startMusic();
         }
 
-        // Auto-fermeture au bout de 2 secondes
         setTimeout(() => {
             if (splash.style.display !== 'none') initExperience();
         }, 2000);
 
         /* ─────────────────────────────────────────
-           ANIMATIONS  — IntersectionObserver sur TOUTES les cards
+           ANIMATIONS  — IntersectionObserver
         ───────────────────────────────────────── */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -494,7 +490,6 @@
             const btn  = form.querySelector('.btn-submit');
             const fd   = new FormData(form);
 
-            // Si "non" → on ne transmet pas les champs adultes
             if (fd.get('Mairie_Presence') === 'non') fd.delete('Mairie_Adultes');
             if (fd.get('Houppa_Presence') === 'non') fd.delete('Houppa_Adultes');
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mariage de Ornella & Charles</title>
-    
+   
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
@@ -16,55 +16,77 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-creme); color: var(--text-dark); overflow-x: hidden; line-height: 1.6; }
 
-        #splash { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg-creme); display:flex; justify-content:center; align-items:center; z-index:9999; transition: opacity 1.2s; cursor: pointer; }
-        #splash img { width: 180px; animation: heartbeat 2.5s ease-in-out infinite; }
-        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.15); } 50% { transform: scale(1); } 75% { transform: scale(1.1); } }
+        /* Splash réduit à 0.6s */
+        #splash { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg-creme); display:flex; justify-content:center; align-items:center; z-index:9999; transition: opacity 0.3s ease; cursor: pointer; }
+        #splash img { width: 180px; animation: heartbeat 2s ease-in-out infinite; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
         nav { position: sticky; top: 0; width: 100%; z-index: 1000; background: rgba(255, 254, 250, 0.98); border-bottom: 1px solid var(--gold-light); padding: 15px 0; display: flex; justify-content: center; gap: 15px; }
         nav a { text-decoration: none; color: var(--text-dark); font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; font-weight: 700; }
-        
+       
         .main-wrapper { max-width: 600px; margin: 0 auto; padding: 40px 10px; display: flex; flex-direction: column; gap: 60px; }
-        .card { position: relative; padding: 60px 25px; background-color: #fff; border: 1px solid var(--gold-main); box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; overflow: hidden; }
-        .card::after { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 1px solid var(--gold-light); opacity: 0.5; pointer-events: none; }
         
-        .couple-names, .names-inline { 
-            font-family: 'Great Vibes', cursive !important; 
-            color: var(--gold-main); 
-            margin: 10px 0; 
-            white-space: nowrap; 
-            display: block;
-            font-size: clamp(2rem, 10vw, 3.5rem); 
-        }
+        /* Animation fluide pour les sections */
+        .card { position: relative; padding: 60px 25px; background-color: #fff; border: 1px solid var(--gold-main); box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; overflow: hidden; opacity: 0; transform: translateY(50px); transition: opacity 0.9s ease-out, transform 0.9s ease-out, box-shadow 0.9s ease-out; }
+        .card.active { opacity: 1; transform: translateY(0); box-shadow: 0 20px 60px rgba(197,160,89,0.12); }
+
+        /* Animation spécifique Mairie : slide depuis la gauche */
+        #mairie { transform: translateX(-60px) translateY(20px); transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+        #mairie.active { opacity: 1; transform: translateX(0) translateY(0); }
+
+        /* Animation spécifique Houppa : slide depuis la droite + légère rotation */
+        #houppa { transform: translateX(60px) translateY(20px) rotate(0.5deg); transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1); }
+        #houppa.active { opacity: 1; transform: translateX(0) translateY(0) rotate(0deg); }
+
+        /* Reveal animé sur les titres h3 au sein des cartes */
+        .card h3 { overflow: hidden; }
+        .card h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: var(--gold-main); transform: scaleX(0); transform-origin: left; transition: transform 0.7s ease 0.5s; }
+        .card.active h3::after { transform: scaleX(1); }
+
+        /* Reveal animé sur le divider */
+        .card .divider { transform: scaleX(0); transition: transform 0.6s ease 0.6s; transform-origin: center; }
+        .card.active .divider { transform: scaleX(1); }
+
+        /* Fade-in décalé sur les éléments internes */
+        .card > *:not(h3):not(.divider) { opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .card.active > *:not(h3):not(.divider) { opacity: 1; transform: translateY(0); }
+        .card.active > *:nth-child(2) { transition-delay: 0.15s; }
+        .card.active > *:nth-child(3) { transition-delay: 0.25s; }
+        .card.active > *:nth-child(4) { transition-delay: 0.35s; }
+        .card.active > *:nth-child(5) { transition-delay: 0.45s; }
+        .card.active > *:nth-child(6) { transition-delay: 0.55s; }
+        .card.active > *:nth-child(7) { transition-delay: 0.65s; }
+        
+        .card::after { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 1px solid var(--gold-light); opacity: 0.5; pointer-events: none; }
+       
+        .couple-names, .names-inline { font-family: 'Great Vibes', cursive !important; color: var(--gold-main); margin: 10px 0; white-space: nowrap; display: block; font-size: clamp(2rem, 10vw, 3.5rem); }
 
         #houppa { position: relative; overflow: visible; padding-top: 80px; padding-bottom: 80px; }
         .flower-specific { position: absolute; width: 120px; z-index: 10; }
         .flower-specific-top { top: -30px; right: -40px; }
         .flower-specific-bottom { bottom: -30px; left: -40px; }
-        
+       
         .deco-leaf { position: absolute; top: 0; bottom: 0; width: 80px; background-size: contain; background-repeat: repeat-y; opacity: 0.6; }
         .leaf-left { left: -15px; background-image: url('feuille-gauche1.png'); }
         .leaf-right { right: -15px; background-image: url('feuille-droite1.png'); }
-        
+       
         h3 { font-family: 'Cinzel', serif; letter-spacing: 3px; font-size: 1.3rem; color: var(--gold-main); text-transform: uppercase; margin-bottom: 15px; }
         .hebrew-row { font-size: 2rem; font-family: serif; color: var(--gold-main); margin-bottom: 10px; }
         .date-main { color: var(--gold-main); font-weight: 700; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
         .divider { width: 60px; height: 1px; background: var(--gold-main); margin: 25px auto; }
-        
+       
         .btn-waze { display: inline-block; margin-top: 25px; color: var(--gold-main); border-bottom: 1px solid var(--gold-main); padding-bottom: 5px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        
+       
         .rsvp-container { text-align: left; margin-top: 30px; }
         .form-label { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--gold-main); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
         input[type="text"], input[type="number"], select { width: 100%; padding: 12px 0; border: none; border-bottom: 1.5px solid var(--gold-light); background: transparent; font-family: 'Montserrat', sans-serif; outline: none; margin-bottom: 10px; }
-        
+       
         .btn-submit { background: var(--gold-main); color: #fff; border: none; padding: 20px; width: 100%; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 4px; font-weight: 700; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
+       
         .music-btn { position: fixed; bottom: 30px; right: 20px; z-index: 2000; width: 55px; height: 55px; border-radius: 50%; background: var(--gold-main); border: 2px solid #fff; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
-        .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
+       
         .souvenir-text { font-style: italic; margin-top: 25px; font-size: 1rem; color: #444; font-weight: 700; line-height: 1.5; border-top: 1px solid #E8D5B5; padding-top: 15px; }
-        
+       
         .bsd-text { position: absolute; top: 15px; right: 20px; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #C5A059; font-weight: 700; z-index: 100; }
         .bsd-mairie { right: 50px; }
 
@@ -88,7 +110,7 @@
     </nav>
 
     <div class="main-wrapper">
-        <div id="mairie" class="card reveal">
+        <div id="mairie" class="card">
             <span class="bsd-text bsd-mairie">בס"ד</span>
             <div class="deco-leaf leaf-left"></div>
             <div class="deco-leaf leaf-right"></div>
@@ -103,7 +125,7 @@
             <a href="https://waze.com/ul?q=Mairie%20de%20Joinville-le-Pont" target="_blank" class="btn-waze">GPS WAZE</a>
         </div>
 
-        <div id="houppa" class="card reveal">
+        <div id="houppa" class="card">
             <span class="bsd-text">בס"ד</span>
             <img src="haut-droite.png" alt="" class="flower-specific flower-specific-top">
             <img src="bas-gauche.png" alt="" class="flower-specific flower-specific-bottom">

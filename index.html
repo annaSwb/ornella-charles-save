@@ -24,8 +24,6 @@
             background-color: var(--white);
             font-family: 'Cormorant Garamond', serif;
             overflow: hidden;
-            /* Nécessaire pour l'effet 3D du livre */
-            perspective: 2000px;
         }
 
         .floral-background {
@@ -42,6 +40,7 @@
             z-index: 1;
         }
 
+        /* --- NOUVELLE ANIMATION : "THE GRAND REVEAL" --- */
         .main-wrapper {
             position: relative;
             z-index: 10;
@@ -53,17 +52,17 @@
             justify-content: center;
             text-align: center;
             padding: 20px;
-            /* Transition pour l'effet livre */
-            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1s;
-            transform-origin: left center; /* Le livre s'ouvre depuis la gauche */
-            backface-visibility: hidden; /* Cache le dos pendant la rotation */
+            /* Transition fluide pour l'effet de disparition */
+            transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 1;
+            transform: scale(1);
         }
 
-        /* Classe activée au clic pour ouvrir le livre */
-        .book-open {
-            transform: rotateY(-180deg);
+        /* Classe déclenchée au clic */
+        .page-exit {
             opacity: 0;
-            pointer-events: none; /* Empêche les clics pendant l'animation */
+            transform: scale(1.2); /* Zoom léger lors de la sortie */
+            filter: blur(20px);    /* Effet de flou "de fou" */
         }
 
         .photo-arche {
@@ -79,7 +78,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* --- AJOUT ANIMATION FLOTTAISON --- */
             animation: floatArche 6s ease-in-out infinite;
         }
 
@@ -89,11 +87,9 @@
             object-fit: cover;
             border-radius: 85px 85px 0 0; 
             transform: scale(1.3); 
-            /* --- AJOUT ANIMATION ZOOM LENT --- */
             animation: zoomPhoto 12s ease-in-out infinite alternate;
         }
 
-        /* Taille réduite ici */
         h1 {
             font-family: 'Pinyon Script', cursive;
             font-size: 2.2rem; 
@@ -119,7 +115,6 @@
             min-width: 35px;
         }
 
-        /* Taille réduite ici */
         .timer-val {
             font-size: 1rem;
             color: var(--gold);
@@ -145,7 +140,7 @@
             text-transform: uppercase;
             transition: 0.3s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: inline-block; /* Pour que la transformation du bouton fonctionne bien */
+            display: inline-block;
         }
         
         .btn-open:hover {
@@ -159,15 +154,11 @@
             .photo-arche img { border-radius: 70px 70px 0 0; }
         }
 
-        /* --- DÉFINITIONS DES ANIMATIONS --- */
-
-        /* Flottaison douce de l'arche */
         @keyframes floatArche {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
 
-        /* Zoom lent et continu de la photo */
         @keyframes zoomPhoto {
             0% { transform: scale(1.3); }
             100% { transform: scale(1.45); }
@@ -209,7 +200,6 @@
     </div>
 
     <script>
-        // --- TON SCRIPT ORIGINAL DU TIMER (INCHANGÉ) ---
         const target = new Date(2026, 6, 29, 17, 30, 0).getTime();
 
         function updateTimer() {
@@ -226,18 +216,18 @@
         updateTimer();
         setInterval(updateTimer, 1000);
 
-        // --- AJOUT DU SCRIPT POUR L'EFFET LIVRE ---
+        // --- NOUVELLE ANIMATION AU CLIC ---
         document.getElementById('btnInvite').addEventListener('click', function(e) {
-            e.preventDefault(); // Empêche la redirection immédiate
+            e.preventDefault();
             const href = this.getAttribute('href');
             
-            // Active l'animation d'ouverture du livre
-            document.getElementById('mainPage').classList.add('book-open');
+            // Applique la classe d'animation
+            document.getElementById('mainPage').classList.add('page-exit');
             
-            // Redirige vers la page d'invitation après la fin de l'animation (1.5s)
+            // Redirection après la fin de l'animation (1.8s)
             setTimeout(function() {
                 window.location.href = href;
-            }, 1500); 
+            }, 1800); 
         });
     </script>
 </body>

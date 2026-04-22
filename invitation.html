@@ -4,396 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mariage de Ornella & Charles</title>
+   
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root {
-            --gold-main: #C5A059;
-            --gold-light: #E8D5B5;
-            --bg-creme: #FFFEFA;
-            --text-dark: #333;
-        }
+        :root { --gold-main: #C5A059; --gold-light: #E8D5B5; --bg-creme: #FFFEFA; --text-dark: #333; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Cormorant Garamond', serif;
-            background-color: var(--bg-creme);
-            color: var(--text-dark);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-creme); color: var(--text-dark); overflow-x: hidden; line-height: 1.6; }
 
-        /* ───── SPLASH ───── */
-        #splash {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--bg-creme);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.4s ease;
-            cursor: pointer;
-        }
-        #splash img {
-            width: 180px;
-            animation: heartbeat 2s ease-in-out infinite;
-        }
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50%       { transform: scale(1.05); }
-        }
+        /* Splash réduit à 2s */
+        #splash { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg-creme); display:flex; justify-content:center; align-items:center; z-index:9999; transition: opacity 0.5s ease; }
+        #splash img { width: 180px; animation: heartbeat 2s ease-in-out infinite; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        /* ───── NAV ───── */
-        nav {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(255,254,250,0.98);
-            border-bottom: 1px solid var(--gold-light);
-            padding: 15px 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        nav a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
+        nav { position: sticky; top: 0; width: 100%; z-index: 1000; background: rgba(255, 254, 250, 0.98); border-bottom: 1px solid var(--gold-light); padding: 15px 0; display: flex; justify-content: center; gap: 15px; }
+        nav a { text-decoration: none; color: var(--text-dark); font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; font-weight: 700; }
+        
+        .main-wrapper { max-width: 600px; margin: 0 auto; padding: 40px 10px; display: flex; flex-direction: column; gap: 60px; }
+        
+        .card { position: relative; padding: 60px 25px; background-color: #fff; border: 1px solid var(--gold-main); box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; overflow: hidden; opacity: 0; transform: translateY(50px); transition: opacity 0.9s ease-out, transform 0.9s ease-out, box-shadow 0.9s ease-out; }
+        .card.active { opacity: 1; transform: translateY(0); box-shadow: 0 20px 60px rgba(197,160,89,0.12); }
 
-        /* ───── LAYOUT ───── */
-        .main-wrapper {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 60px;
-        }
-
-        /* ───── CARDS ───── */
-        .card {
-            position: relative;
-            padding: 60px 25px;
-            background-color: #fff;
-            border: 1px solid var(--gold-main);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            text-align: center;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.9s ease-out, transform 0.9s ease-out, box-shadow 0.9s ease-out;
-        }
-        .card.active {
-            opacity: 1;
-            transform: translateY(0);
-            box-shadow: 0 20px 60px rgba(197,160,89,0.12);
-        }
-
-        /* Mairie – slide depuis la gauche */
-        #mairie {
-            transform: translateX(-60px) translateY(20px);
-            transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
-        }
+        #mairie { transform: translateX(-60px) translateY(20px); transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
         #mairie.active { opacity: 1; transform: translateX(0) translateY(0); }
 
-        /* Houppa – slide depuis la droite */
-        #houppa {
-            transform: translateX(60px) translateY(20px) rotate(0.5deg);
-            transition: opacity 1s cubic-bezier(0.22,1,0.36,1), transform 1s cubic-bezier(0.22,1,0.36,1);
-        }
+        #houppa { transform: translateX(60px) translateY(20px) rotate(0.5deg); transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1); }
         #houppa.active { opacity: 1; transform: translateX(0) translateY(0) rotate(0deg); }
 
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 8px; left: 8px; right: 8px; bottom: 8px;
-            border: 1px solid var(--gold-light);
-            opacity: 0.5;
-            pointer-events: none;
-        }
+        .card h3 { overflow: hidden; }
+        .card h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: var(--gold-main); transform: scaleX(0); transform-origin: left; transition: transform 0.7s ease 0.5s; }
+        .card.active h3::after { transform: scaleX(1); }
 
-        /* Fade-in décalé des enfants */
-        .card > * {
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .card.active > * { opacity: 1; transform: translateY(0); }
-        .card.active > *:nth-child(1) { transition-delay: 0.05s; }
+        .card .divider { transform: scaleX(0); transition: transform 0.6s ease 0.6s; transform-origin: center; }
+        .card.active .divider { transform: scaleX(1); }
+
+        .card > *:not(h3):not(.divider) { opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .card.active > *:not(h3):not(.divider) { opacity: 1; transform: translateY(0); }
         .card.active > *:nth-child(2) { transition-delay: 0.15s; }
         .card.active > *:nth-child(3) { transition-delay: 0.25s; }
         .card.active > *:nth-child(4) { transition-delay: 0.35s; }
         .card.active > *:nth-child(5) { transition-delay: 0.45s; }
         .card.active > *:nth-child(6) { transition-delay: 0.55s; }
         .card.active > *:nth-child(7) { transition-delay: 0.65s; }
-        .card.active > *:nth-child(8) { transition-delay: 0.75s; }
-        .card.active > *:nth-child(9) { transition-delay: 0.85s; }
+        
+        .card::after { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 1px solid var(--gold-light); opacity: 0.5; pointer-events: none; }
+        
+        .couple-names, .names-inline { font-family: 'Great Vibes', cursive !important; color: var(--gold-main); margin: 10px 0; white-space: nowrap; display: block; font-size: clamp(2rem, 10vw, 3.5rem); }
 
-        /* ───── TYPOGRAPHY ───── */
-        h3 {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 3px;
-            font-size: 1.3rem;
-            color: var(--gold-main);
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-        .couple-names, .names-inline {
-            font-family: 'Great Vibes', cursive !important;
-            color: var(--gold-main);
-            margin: 10px 0;
-            white-space: nowrap;
-            display: block;
-            font-size: clamp(2rem, 10vw, 3.5rem);
-        }
-        .hebrew-row {
-            font-size: 2rem;
-            font-family: serif;
-            color: var(--gold-main);
-            margin-bottom: 10px;
-        }
-        .date-main {
-            color: var(--gold-main);
-            font-weight: 700;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .sub-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-dark);
-            margin: 5px 0 15px 0;
-        }
-        .divider {
-            width: 60px;
-            height: 1px;
-            background: var(--gold-main);
-            margin: 25px auto;
-        }
-        .bsd-text {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            color: #C5A059;
-            font-weight: 700;
-            z-index: 100;
-        }
+        #houppa { position: relative; overflow: visible; padding-top: 80px; padding-bottom: 80px; }
+        .flower-specific { position: absolute; width: 120px; z-index: 10; }
+        .flower-specific-top { top: -30px; right: -40px; }
+        .flower-specific-bottom { bottom: -30px; left: -40px; }
+        
+        .deco-leaf { position: absolute; top: 0; bottom: 0; width: 80px; background-size: contain; background-repeat: repeat-y; opacity: 0.6; }
+        .leaf-left { left: -15px; background-image: url('feuille-gauche1.png'); }
+        .leaf-right { right: -15px; background-image: url('feuille-droite1.png'); }
+        
+        h3 { font-family: 'Cinzel', serif; letter-spacing: 3px; font-size: 1.3rem; color: var(--gold-main); text-transform: uppercase; margin-bottom: 15px; }
+        .hebrew-row { font-size: 2rem; font-family: serif; color: var(--gold-main); margin-bottom: 10px; }
+        .date-main { color: var(--gold-main); font-weight: 900; font-size: 1.9rem; text-transform: uppercase; letter-spacing: 2px; font-style: normal; }
+        .time-info { margin-top: 10px; font-weight: 400; font-size: 1.7rem; color: var(--text-dark); }
+        .venue-info { font-size: 1.2rem; margin-top: 6px; }
+        .divider { width: 60px; height: 1px; background: var(--gold-main); margin: 25px auto; }
+        
+        .btn-waze { display: inline-block; margin-top: 25px; color: var(--gold-main); border-bottom: 1px solid var(--gold-main); padding-bottom: 5px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .rsvp-container { text-align: left; margin-top: 30px; }
+        /* Labels en poids normal */
+        .form-label { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 400; color: var(--gold-main); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid var(--gold-main); background: transparent; font-family: 'Montserrat', sans-serif; outline: none; margin-bottom: 10px; font-size: 1rem; color: var(--text-dark); }
+        
+        /* Seulement les inputs nombre en gras */
+        input[type="number"] { font-weight: 900 !important; }
+
+        .btn-submit { background: var(--gold-main); color: #fff; border: none; padding: 20px; width: 100%; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 4px; font-weight: 700; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        .music-btn { position: fixed; bottom: 30px; right: 20px; z-index: 2000; width: 55px; height: 55px; border-radius: 50%; background: var(--gold-main); border: 2px solid #fff; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        .souvenir-text { font-style: italic; margin-top: 25px; font-size: 1rem; color: #444; font-weight: 700; line-height: 1.5; border-top: 1px solid #E8D5B5; padding-top: 15px; }
+        
+        .bsd-text { position: absolute; top: 15px; right: 20px; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #C5A059; font-weight: 700; z-index: 100; }
         .bsd-mairie { right: 50px; }
 
-        /* ───── DÉCO FEUILLES ───── */
-        .deco-leaf {
-            position: absolute;
-            top: 0; bottom: 0;
-            width: 80px;
-            background-size: contain;
-            background-repeat: repeat-y;
-            opacity: 0.6;
-        }
-        .leaf-left  { left: -15px;  background-image: url('feuille-gauche1.png'); }
-        .leaf-right { right: -15px; background-image: url('feuille-droite1.png'); }
-
-        /* ───── FLEURS HOUPPA ───── */
-        #houppa { padding-top: 80px; padding-bottom: 80px; }
-        .flower-specific { position: absolute; width: 120px; z-index: 10; }
-        .flower-specific-top    { top: -30px;    right: -40px; }
-        .flower-specific-bottom { bottom: -30px; left: -40px;  }
-
-        /* ───── BOUTON WAZE ───── */
-        .btn-waze {
-            display: inline-block;
-            margin-top: 25px;
-            color: var(--gold-main);
-            border-bottom: 1px solid var(--gold-main);
-            padding-bottom: 5px;
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* ───── SOUVENIR ───── */
-        .souvenir-text {
-            font-style: italic;
-            margin-top: 25px;
-            font-size: 1rem;
-            color: #444;
-            font-weight: 700;
-            line-height: 1.5;
-            border-top: 1px solid #E8D5B5;
-            padding-top: 15px;
-        }
-
-        /* ───── RSVP ───── */
-        .rsvp-container { text-align: left; margin-top: 30px; }
-        .form-label {
-            display: block;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--gold-main);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 12px 0;
-            border: none;
-            border-bottom: 1.5px solid var(--gold-light);
-            background: transparent;
-            font-family: 'Montserrat', sans-serif;
-            outline: none;
-            margin-bottom: 10px;
-        }
-        .qty-wrapper { display: none; }
-        .btn-submit {
-            background: var(--gold-main);
-            color: #fff;
-            border: none;
-            padding: 20px;
-            width: 100%;
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        #success-msg {
-            display: none;
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-            color: var(--gold-main);
-            padding: 20px;
-            font-weight: 700;
-        }
-
-        /* ───── BOUTON MUSIQUE ───── */
-        .music-btn {
-            position: fixed;
-            bottom: 30px; right: 20px;
-            z-index: 2000;
-            width: 55px; height: 55px;
-            border-radius: 50%;
-            background: var(--gold-main);
-            border: 2px solid #fff;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
+        .sub-title { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dark); margin: 5px 0 15px 0; }
+        .hachem-text { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: #666; line-height: 1.7; margin: 8px 0 4px 0; }
+        #success-msg { display: none; text-align: center; font-family: 'Montserrat', sans-serif; color: var(--gold-main); padding: 20px; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <!-- SPLASH -->
-    <div id="splash" onclick="initExperience()">
+    <div id="splash">
         <img src="logo.png" alt="Logo">
     </div>
 
-    <!-- MUSIQUE -->
     <audio id="bg-music" loop><source src="musique.mp3" type="audio/mpeg"></audio>
-    <button id="music-toggle" class="music-btn" onclick="toggleMusic(event)">
-        <i class="fa-solid fa-play"></i>
-    </button>
+    <button id="music-toggle" class="music-btn" onclick="toggleMusic(event)"><i class="fa-solid fa-play"></i></button>
 
-    <!-- NAV -->
     <nav>
         <a href="#mairie">Mairie</a>
         <a href="#houppa">Houppa</a>
         <a href="#rsvp">Réponses</a>
     </nav>
 
-    <!-- CONTENU -->
     <div class="main-wrapper">
-
-        <!-- MAIRIE -->
         <div id="mairie" class="card">
             <span class="bsd-text bsd-mairie">בס"ד</span>
             <div class="deco-leaf leaf-left"></div>
             <div class="deco-leaf leaf-right"></div>
-            <i class="fa-solid fa-landmark" style="color:var(--gold-main);font-size:1.5rem;margin-bottom:10px;"></i>
-            <h3>Cérémonie Civile</h3>
+            <svg width="80" height="42" viewBox="0 0 80 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 12px;">
+                <defs>
+                    <linearGradient id="goldGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#E8C97A;stop-opacity:1" />
+                        <stop offset="40%" style="stop-color:#C5A059;stop-opacity:1" />
+                        <stop offset="70%" style="stop-color:#F0D98A;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#A07830;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="goldGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#E8C97A;stop-opacity:1" />
+                        <stop offset="40%" style="stop-color:#C5A059;stop-opacity:1" />
+                        <stop offset="70%" style="stop-color:#F0D98A;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#A07830;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="27" cy="21" r="17" stroke="url(#goldGrad1)" stroke-width="3" fill="none"/>
+                <circle cx="53" cy="21" r="17" stroke="url(#goldGrad2)" stroke-width="3" fill="none"/>
+            </svg>
+            <h3 style="font-size: 0.9rem;">Cérémonie Civile</h3>
             <div class="couple-names">Ornella & Charles</div>
             <div class="sub-title">se diront "oui"</div>
             <div class="divider"></div>
-            <div class="date-main">Le Lundi 27 Juillet 2026</div>
-            <p style="margin-top:10px;font-weight:600;">À 15H30</p>
-            <p><strong>Mairie de Joinville-le-Pont</strong></p>
-            <a href="https://waze.com/ul?q=Mairie%20de%20Joinville-le-Pont" target="_blank" class="btn-waze">GPS WAZE</a>
+            <div class="date-main">Le Lundi 24 Août 2026</div>
+            <p class="time-info">À 14H00</p>
+            <p class="venue-info"><strong>Mairie de Suresnes</strong></p>
+            <p class="venue-info"><strong>2 rue Carnot, 92150 Suresnes</strong></p>
+            <a href="https://waze.com/ul?q=2%20rue%20Carnot%2C%2092150%20Suresnes" target="_blank" class="btn-waze">🚗 GPS WAZE</a> <button onclick="addToCalendar('mairie')" class="btn-waze" style="background:none;border:none;cursor:pointer;margin-top:25px;">📅 Bloquer la date</button>
         </div>
 
-        <!-- HOUPPA -->
         <div id="houppa" class="card">
             <span class="bsd-text">בס"ד</span>
             <img src="haut-droite.png" alt="" class="flower-specific flower-specific-top">
-            <img src="bas-gauche.png"  alt="" class="flower-specific flower-specific-bottom">
-            <img src="hebreu.png" alt="BeSiman Tov" style="width:80%;max-width:250px;margin-bottom:20px;">
-            <img src="houppa.png" alt="Houppa" style="width:100%;border-radius:4px;margin-bottom:20px;border:1px solid var(--gold-light);">
+            <img src="bas-gauche.png" alt="" class="flower-specific flower-specific-bottom">
+            <img src="hebreu.png" alt="BeSiman Tov" style="width: 80%; max-width: 250px; margin-bottom: 20px;">
+            <img src="houppa.png" alt="Houppa" style="width: 100%; border-radius: 4px; margin-bottom: 20px; border: 1px solid var(--gold-light);">
             <h3>Cérémonie Religieuse</h3>
+            <p class="hachem-text">Nous remercions Hachem de vous convier au mariage<br>de leurs enfants et petits-enfants</p>
             <div class="names-inline">Ornella & Charles</div>
             <div class="hebrew-row">שלום & חוה</div>
             <div class="divider"></div>
-            <div class="date-main">Mercredi 29 Juillet 2026</div>
-            <p style="margin-top:10px;font-weight:600;">À 17H30</p>
-            <p><strong>La Verrière 91</strong></p>
+            <div class="date-main">Jeudi 27 Août 2026</div>
+            <p class="time-info">À 17H30</p>
+            <br><p class="venue-info"><strong>Les Salons Baccara</strong></p>
+            <p class="venue-info"><strong>61 rue saint André 93000 Bobigny</strong></p>
             <p class="souvenir-text">
                 En ce jour si précieux, nous avons une tendre pensée pour la mémoire de ma maman,
                 Brigitte Léa Haouzi, notre étoile qui illuminera ce mariage de sa lumière éternelle.
-                Ainsi qu'à tous nos chers disparus partis trop tôt.
+                Ainsi qu’à tous nos chers disparus partis trop tôt.
             </p>
-            <a href="https://waze.com/ul?q=La%20Verriere%2091" target="_blank" class="btn-waze">GPS WAZE</a>
+            <a href="https://waze.com/ul?q=61%20rue%20saint%20Andr%C3%A9%2C%2093000%20Bobigny" target="_blank" class="btn-waze">🚗 GPS WAZE</a> <button onclick="addToCalendar('houppa')" class="btn-waze" style="background:none;border:none;cursor:pointer;margin-top:25px;">📅 Bloquer la date</button>
         </div>
 
-        <!-- RSVP -->
         <div id="rsvp" class="card">
             <h3>Confirmation</h3>
-            <form id="rsvpForm" class="rsvp-container"
-                  action="https://script.google.com/macros/s/AKfycbw8ry5npGywgcxwGs_3FNptD0BN3nJ1OwoD5P-yOxAVGucB3BfzC_oT79kZzwe3ur4Ofg/exec"
-                  method="POST">
-
+            <form id="rsvpForm" class="rsvp-container" action="https://script.google.com/macros/s/AKfycbw8ry5npGywgcxwGs_3FNptD0BN3nJ1OwoD5P-yOxAVGucB3BfzC_oT79kZzwe3ur4Ofg/exec" method="POST">
                 <label class="form-label">Votre Nom & Prénom</label>
-                <input type="text" name="Nom_Prenom" placeholder="Ex: Jean Dupont" required>
-
+                <input type="text" name="Nom_Prenom" required>
+                
                 <label class="form-label">Présence à la Mairie ?</label>
-                <select name="Mairie_Presence" id="sel-mairie" onchange="toggleQty('m_qty', this.value)">
-                    <option value="non">Je ne serai pas présent(e)</option>
-                    <option value="oui">Je serai présent(e)</option>
+                <select name="Mairie_Presence" onchange="showQty('m_qty', this.value === 'oui')">
+                    <option value="non">Non</option>
+                    <option value="oui">Oui</option>
                 </select>
-                <div id="m_qty" class="qty-wrapper">
+                <div id="m_qty" style="display:none; margin-top:15px;">
                     <label class="form-label">Nombre d'adultes (Mairie)</label>
                     <select name="Mairie_Adultes">
                         <option value="1">1 adulte</option>
                         <option value="2">2 adultes</option>
                     </select>
                 </div>
-
-                <label class="form-label" style="margin-top:15px;">Présence à la Houppa ?</label>
-                <select name="Houppa_Presence" id="sel-houppa" onchange="toggleQty('h_qty', this.value)">
-                    <option value="non">Je ne serai pas présent(e)</option>
-                    <option value="oui">Je serai présent(e)</option>
+                
+                <label class="form-label" style="margin-top: 15px;">Présence à la Houppa ?</label>
+                <select name="Houppa_Presence" onchange="showQty('h_qty', this.value === 'oui')">
+                    <option value="non">Non</option>
+                    <option value="oui">Oui</option>
                 </select>
-                <div id="h_qty" class="qty-wrapper">
+                <div id="h_qty" style="display:none; margin-top:15px;">
                     <label class="form-label">Nombre d'adultes (Houppa)</label>
                     <select name="Houppa_Adultes">
                         <option value="1">1 adulte</option>
@@ -401,113 +199,82 @@
                     </select>
                 </div>
 
-                <label class="form-label" style="margin-top:15px;">Message (Mazal Tov !)</label>
+                <label class="form-label" style="margin-top: 15px;">Message (Mazal Tov !)</label>
                 <input type="text" name="Message" placeholder="Votre petit mot pour les mariés">
 
-                <button type="submit" class="btn-submit">Valider ma réponse</button>
+                <p style="font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;color:var(--gold-main);text-align:center;margin-top:20px;">⏰ Merci de confirmer avant le <strong>27 juin 2026</strong></p><button type="submit" class="btn-submit">Valider ma réponse</button>
             </form>
-            <div id="success-msg">Merci ! Votre réponse a bien été enregistrée. 🎉</div>
+            <div id="success-msg">Merci ! Votre réponse a bien été enregistrée.</div>
         </div>
-
-    </div><!-- /.main-wrapper -->
+    </div>
 
     <script>
-        /* ─────────────────────────────────────────
-           MUSIQUE
-        ───────────────────────────────────────── */
-        const audio    = document.getElementById('bg-music');
-        const musicBtn = document.getElementById('music-toggle');
-        let isPlaying  = false;
+    const audio = document.getElementById("bg-music");
+    const musicBtn = document.getElementById("music-toggle");
+    const splash = document.getElementById('splash');
+    let isPlaying = false;
 
-        function startMusic() {
-            if (isPlaying) return;
+    // Splash auto-dismiss après 2s
+    setTimeout(() => { 
+        splash.style.opacity = '0'; 
+        setTimeout(() => splash.style.display = 'none', 500);
+    }, 2000);
+
+    function startMusic() {
+        if (!isPlaying) {
             audio.play().then(() => {
                 musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
                 isPlaying = true;
-            }).catch(() => {
-                ['touchstart', 'scroll', 'click'].forEach(evt => {
-                    window.addEventListener(evt, function handler() {
-                        if (!isPlaying) startMusic();
-                        window.removeEventListener(evt, handler);
-                    }, { once: true });
-                });
-            });
+            }).catch(e => console.log("Interaction utilisateur requise"));
         }
+    }
 
-        function toggleMusic(e) {
-            if (e) e.stopPropagation();
-            if (isPlaying) {
-                audio.pause();
-                musicBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-                isPlaying = false;
-            } else {
-                audio.play();
-                musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-                isPlaying = true;
-            }
-        }
+    // Déclencheur global (scroll, click, touch)
+    function handleInteraction() {
+        startMusic();
+        window.removeEventListener('scroll', handleInteraction);
+        window.removeEventListener('click', handleInteraction);
+        window.removeEventListener('touchstart', handleInteraction);
+    }
+    window.addEventListener('scroll', handleInteraction);
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction);
 
-        /* ─────────────────────────────────────────
-           SPLASH  — disparaît après 2 s
-        ───────────────────────────────────────── */
-        const splash = document.getElementById('splash');
+    function toggleMusic(e) {
+        if(e) e.stopPropagation();
+        if (isPlaying) { audio.pause(); musicBtn.innerHTML = '<i class="fa-solid fa-play"></i>'; isPlaying = false; }
+        else { audio.play(); musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>'; isPlaying = true; }
+    }
 
-        function initExperience() {
-            if (splash.style.display === 'none') return;
-            splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; }, 400);
-            startMusic();
-        }
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('.btn-submit');
+        btn.innerHTML = "Envoi en cours...";
+        btn.disabled = true;
+        const params = new URLSearchParams(new FormData(this));
+        fetch(this.action, { method: 'POST', mode: 'no-cors', body: params })
+        .then(() => { this.style.display = 'none'; document.getElementById('success-msg').style.display = 'block'; })
+        .catch(() => alert("Erreur"));
+    });
 
-        setTimeout(() => {
-            if (splash.style.display !== 'none') initExperience();
-        }, 2000);
+    function showQty(id, isVisible) { document.getElementById(id).style.display = isVisible ? 'block' : 'none'; }
 
-        /* ─────────────────────────────────────────
-           ANIMATIONS  — IntersectionObserver
-        ───────────────────────────────────────── */
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.08 });
-
-        document.querySelectorAll('.card').forEach(el => observer.observe(el));
-
-        /* ─────────────────────────────────────────
-           FORMULAIRE
-        ───────────────────────────────────────── */
-        function toggleQty(id, value) {
-            document.getElementById(id).style.display = (value === 'oui') ? 'block' : 'none';
-        }
-
-        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const form = this;
-            const btn  = form.querySelector('.btn-submit');
-            const fd   = new FormData(form);
-
-            if (fd.get('Mairie_Presence') === 'non') fd.delete('Mairie_Adultes');
-            if (fd.get('Houppa_Presence') === 'non') fd.delete('Houppa_Adultes');
-
-            btn.textContent = 'Envoi en cours…';
-            btn.disabled = true;
-
-            fetch(form.action, { method: 'POST', body: fd })
-                .then(() => {
-                    form.style.display = 'none';
-                    document.getElementById('success-msg').style.display = 'block';
-                })
-                .catch(() => {
-                    alert("Erreur lors de l'envoi. Veuillez réessayer.");
-                    btn.textContent = 'Valider ma réponse';
-                    btn.disabled = false;
-                });
-        });
-    </script>
-
+    function addToCalendar(evt) {
+        var title = evt === 'mairie' ? 'Mariage – Cérémonie Civile' : 'Mariage – Houppa';
+        var start = evt === 'mairie' ? '20260824T120000Z' : '20260827T153000Z';
+        var end = evt === 'mairie' ? '20260824T140000Z' : '20260827T193000Z';
+        var location = evt === 'mairie' ? '2 rue Carnot, 92150 Suresnes' : '61 rue saint André, 93000 Bobigny';
+        var ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:'+start+'\r\nDTEND:'+end+'\r\nSUMMARY:'+title+'\r\nLOCATION:'+location+'\r\nEND:VEVENT\r\nEND:VCALENDAR';
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([ics], {type:'text/calendar'}));
+        a.download = evt+'_mariage.ics'; a.click();
+    }
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.2 });
+    
+    document.querySelectorAll('.card').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
